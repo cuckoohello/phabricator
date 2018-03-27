@@ -6766,7 +6766,10 @@ phutil_register_library_map(array(
     'HeraldPonderQuestionAdapter' => 'HeraldAdapter',
     'HeraldPreCommitAdapter' => 'HeraldAdapter',
     'HeraldPreCommitContentAdapter' => 'HeraldPreCommitAdapter',
-    'HeraldPreCommitRefAdapter' => 'HeraldPreCommitAdapter',
+    'HeraldPreCommitRefAdapter' => array(
+      'HeraldPreCommitAdapter',
+      'HarbormasterBuildableAdapterInterface',
+    ),
     'HeraldPreventActionGroup' => 'HeraldActionGroup',
     'HeraldProjectsField' => 'HeraldField',
     'HeraldRecursiveConditionsException' => 'Exception',
@@ -9837,6 +9840,7 @@ phutil_register_library_map(array(
     'PhabricatorRepositoryPushEventQuery' => 'PhabricatorCursorPagedPolicyAwareQuery',
     'PhabricatorRepositoryPushLog' => array(
       'PhabricatorRepositoryDAO',
+      'HarbormasterBuildableInterface',
       'PhabricatorPolicyInterface',
     ),
     'PhabricatorRepositoryPushLogPHIDType' => 'PhabricatorPHIDType',

@@ -1,6 +1,6 @@
 <?php
 
-final class HeraldPreCommitRefAdapter extends HeraldPreCommitAdapter {
+final class HeraldPreCommitRefAdapter extends HeraldPreCommitAdapter implements HarbormasterBuildableAdapterInterface {
 
   public function getAdapterContentName() {
     return pht('Commit Hook: Branches/Tags/Bookmarks');
@@ -22,6 +22,27 @@ final class HeraldPreCommitRefAdapter extends HeraldPreCommitAdapter {
 
   public function getHeraldName() {
     return pht('Push Log (Ref)');
+  }
+
+/* -(  HarbormasterBuildableAdapterInterface  )------------------------------ */
+
+  private $buildRequests = array();
+
+  public function getHarbormasterBuildablePHID() {
+    return $this->getObject()->getPHID();
+  }
+
+  public function getHarbormasterContainerPHID() {
+    return $this->getObject()->getRepository()->getPHID();
+  }
+
+  public function getQueuedHarbormasterBuildRequests() {
+    return $this->buildRequests;
+  }
+
+  public function queueHarbormasterBuildRequest(
+    HarbormasterBuildRequest $request) {
+    $this->buildRequests[] = $request;
   }
 
 }

@@ -31,8 +31,10 @@ final class PhabricatorRepositoryPushLogPHIDType extends PhabricatorPHIDType {
 
     foreach ($handles as $phid => $handle) {
       $log = $objects[$phid];
+      $id = $log->getPushEvent()->getID();
 
-      $handle->setName(pht('Push Log %d', $log->getID()));
+      $handle->setName(pht('Push Log %d',$id));
+      $handle->setURI("/diffusion/pushlog/view/{$id}/");
     }
   }
 

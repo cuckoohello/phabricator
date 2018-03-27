@@ -11,7 +11,9 @@
  */
 final class PhabricatorRepositoryPushLog
   extends PhabricatorRepositoryDAO
-  implements PhabricatorPolicyInterface {
+  implements
+    HarbormasterBuildableInterface,
+    PhabricatorPolicyInterface {
 
   const REFTYPE_BRANCH = 'branch';
   const REFTYPE_TAG = 'tag';
@@ -228,4 +230,57 @@ final class PhabricatorRepositoryPushLog
       "repository.");
   }
 
+/* -(  HarbormasterBuildableInterface  )------------------------------------- */
+
+
+  public function getHarbormasterBuildableDisplayPHID() {
+    return $this->getHarbormasterBuildablePHID();
+  }
+
+  public function getHarbormasterBuildablePHID() {
+    return $this->getPHID();
+  }
+
+  public function getHarbormasterContainerPHID() {
+    return $this->getRepository()->getPHID();
+  }
+
+  public function getHarbormasterPublishablePHID() {
+    return $this->getPHID();
+  }
+
+  public function getBuildVariables() {
+    $results = array();
+
+    $results['buildable.commit'] = $this->getRefNew();
+    $results['pushlog.reftype'] = $this->getRefType();
+    $results['pushlog.refname'] = $this->getRefName();
+    $repo = $this->getRepository();
+
+    $results['repository.callsign'] = $repo->getCallsign();
+    $results['repository.phid'] = $repo->getPHID();
+    $results['repository.vcs'] = $repo->getVersionControlSystem();
+    $results['repository.uri'] = $repo->getPublicCloneURI();
+
+    return $results;
+  }
+
+  public function getAvailableBuildVariables() {
+    return array(
+      'buildable.commit' =>
+        pht('The differential commit ID, if applicable.'),
+      'pushlog.reftype' =>
+        pht('The reftype of pushlog, either "branch", "tag", "bookmark".'),
+      'pushlog.refname' =>
+        pht('The refname of pushlog, branch name or tag name.'),
+      'repository.callsign' =>
+        pht('The callsign of the repository in Phabricator.'),
+      'repository.phid' =>
+        pht('The PHID of the repository in Phabricator.'),
+      'repository.vcs' =>
+        pht('The version control system, either "svn", "hg" or "git".'),
+      'repository.uri' =>
+        pht('The URI to clone or checkout the repository from.'),
+    );
+  }
 }

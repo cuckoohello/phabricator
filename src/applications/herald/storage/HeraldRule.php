@@ -265,6 +265,10 @@ final class HeraldRule extends HeraldDAO
   public function setRepetitionPolicyStringConstant($value) {
     $map = self::getRepetitionPolicyMap();
 
+    if (is_null($value)) {
+      $value = 'every';
+    }
+
     if (!isset($map[$value])) {
       throw new Exception(
         pht(

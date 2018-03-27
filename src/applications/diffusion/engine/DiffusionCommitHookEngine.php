@@ -348,6 +348,14 @@ final class DiffusionCommitHookEngine extends Phobject {
           }
         }
       }
+
+      if ($update->getRefType() !== PhabricatorRepositoryPushLog::REFTYPE_COMMIT
+        && $adapter instanceof HarbormasterBuildableAdapterInterface) {
+        HarbormasterBuildable::applyBuildPlans(
+          $adapter->getHarbormasterBuildablePHID(),
+          $adapter->getHarbormasterContainerPHID(),
+          $adapter->getQueuedHarbormasterBuildRequests());
+      }
     }
 
     if ($blocking_effect) {
